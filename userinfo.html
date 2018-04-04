@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+    <script src="https://cdn.bootcss.com/js-sha1/0.6.0/sha1.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+</head>
+
+<body>
+
+    <!-- https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx76bdcf78e0e0265e&redirect_uri=http%3A%2F%2Fucdrn3.natappfree.cc%2Fuserinfo.html&response_type=code&scope=snsapi_userinfo&state=12345#wechat_redirect -->
+
+    <div id="app">{{userinfo}}
+    </div>
+
+    <script>
+        let aaapp = new Vue({
+            el: '#app',
+            data: {
+                globalaccess_token: '',
+                userinfo:'',
+                images: []
+            },
+            mounted() {
+                let vm = this
+
+                //第二步：通过code换取网页授权access_token
+                let code = this.parseQueryString().code
+                alert(JSON.stringify(this.parseQueryString()))
+
+                axios.get(`/getinfo?code=${code}`).then(({data})=>{
+                    vm.userinfo = data
+                })
+            },
+            methods: {
+                parseQueryString() { 
+                    var reg_url = /^[^\?]+\?([\w\W]+)$/,
+                          reg_para = /([^&=]+)=([\w\W]*?)(&|$|#)/g,
+                          arr_url = reg_url.exec(window.location.href),
+                          ret = {}; 
+                    if (arr_url && arr_url[1]) {  
+                        var str_para = arr_url[1],
+                            result;  
+                        while ((result = reg_para.exec(str_para)) != null) {   
+                            ret[result[1]] = result[2];  
+                        } 
+                    } 
+                    return ret;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

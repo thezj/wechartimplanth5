@@ -25,12 +25,12 @@
         let aaapp = new Vue({
             el: '#app',
             data: {
+                globalaccess_token:'',
                 images: []
             },
             mounted() {
                 let vmm = this
                 wx.ready(function () {
-                    console.log(11111)
                     wx.chooseImage({
                         count: 1, // 默认9
                         sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
@@ -45,7 +45,8 @@
                 axios.get('/signature').then(({
                     data
                 }) => {
-                    console.log('111111111111', data)
+                    console.log('signature===========', data)
+                    vm.globalaccess_token = data.globalaccess_token
                     wx.config({
                         debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                         appId: 'wx76bdcf78e0e0265e', // 必填，公众号的唯一标识
